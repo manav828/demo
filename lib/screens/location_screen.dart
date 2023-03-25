@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'dart:convert';
 
 class LocationScreen extends StatefulWidget {
+  LocationScreen({this.locationweather});
+  final locationweather;
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  int temperature;
+  String city;
+  String img;
   @override
+  void initState() {
+    super.initState();
+    print('hii');
+    updateUI(widget.locationweather);
+  }
+
+  void updateUI(dynamic weatherData) {
+    setState(() {
+      // var id = jsonDecode(weatherData)['weather'][0]['id'];
+      double temp = weatherData['current']['temp_c'];
+      temperature = temp.toInt();
+      city = weatherData['location']['name'];
+      img = weatherData['current']['condition']['icon'];
+      print(img);
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -28,14 +51,14 @@ class _LocationScreenState extends State<LocationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () {},
                     child: Icon(
                       Icons.near_me,
                       size: 50.0,
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {},
                     child: Icon(
                       Icons.location_city,
@@ -45,15 +68,16 @@ class _LocationScreenState extends State<LocationScreen> {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(left: 15.0),
+                padding: EdgeInsets.only(left: 1.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '32°',
+                      '$temperature°',
                       style: kTempTextStyle,
                     ),
                     Text(
-                      '☀️',
+                      '☀',
                       style: kConditionTextStyle,
                     ),
                   ],
